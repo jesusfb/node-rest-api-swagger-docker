@@ -1,6 +1,6 @@
-import {Request, Response, NextFunction} from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { SECRET } from "../../config";
+import { JWT_SECRET } from "../../config";
 import { createError } from "../helpers/index";
 import type { JwtPayload } from "jsonwebtoken"
 
@@ -18,7 +18,7 @@ const isAuth = (req: IRequestWithUserId, res: Response, next: NextFunction): voi
             throw createError(401);
         }
   
-        const { id, role } = jwt.verify(token, SECRET) as JwtPayload;
+        const { id, role } = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
         req.userId = id;
         req.userRole = role;

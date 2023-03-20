@@ -42,10 +42,10 @@ const addUser = async (req: IRequestWithUserId, res: Response): Promise<void> =>
 
 const getUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
     const { id } = req.params;
-    const { userId, userRole } = req;
+    const { userRole } = req;
     let result;
 
-    if (userRole == 'ADMIN' || userId?.toString() === id) {
+    if (userRole == 'ADMIN') {
         result = await User.findById(id);
     }
 

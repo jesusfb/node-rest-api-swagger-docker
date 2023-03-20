@@ -1,10 +1,10 @@
 import express, {Express, Request, Response, NextFunction} from "express";
-import cors from "cors";
+import cors from "./middlewares/cors";
 import mongoose from "mongoose";
 import todoRoutes from "./routes/api/todo-routes";
 import userRoutes from "./routes/api/user-routes";
 import authRoutes from "./routes/api/auth-routes";
-import {MONGO_URL, PORT} from '../config';
+import {MONGO_URI, PORT} from '../config';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 
@@ -17,7 +17,7 @@ const app: Express = express();
 
 const swaggerDocument = YAML.load('./public/swagger.yml');
 
-app.use(cors());
+app.use(cors);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -38,7 +38,7 @@ app.use((error:RequestError, req: Request, res:Response, next: NextFunction): vo
 });
 
 mongoose
-    .connect(MONGO_URL)
+    .connect(MONGO_URI)
     .then(()=> {
         console.log("DataBase connected...")
         app.listen(PORT);

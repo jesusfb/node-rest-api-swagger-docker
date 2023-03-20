@@ -2,11 +2,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT: number = Number(process.env.PORT) || 3001;
-const MONGO_URL: string = process.env.MONGO_URL || '';
-const SECRET: string = process.env.SECRET || '';
+const MONGO_URI: string = process.env.MONGO_URI || '';
+const JWT_SECRET: string = process.env.JWT_SECRET || '';
 
 export  {
-    SECRET,
+    JWT_SECRET,
     PORT,
-    MONGO_URL
+    MONGO_URI
 }
