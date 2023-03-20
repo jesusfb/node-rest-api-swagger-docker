@@ -1,30 +1,47 @@
 import User from "../models/User";
-import { IUser } from '../interfaces';
 import {Request, Response} from "express";
 
 import { createError } from "../helpers/index";
+import { IRequestWithUserId } from '../interfaces';
 
-const getUsers = async (req: Request, res: Response): Promise<void>  => {
-    const result = await User.find();
+import { userDto } from '../dto';
+
+const getUsers = async (req: IRequestWithUserId, res: Response): Promise<void>  => {
+    const { userId, userRole } = req;
+    let result;
+
+    if (userRole == 'ADMIN') {
+        result = await User.find();
+    } else {
+        result = await User.findById(userId);
+    }
+
+    result = await User.find();
+
     res.json(result);
 }
 
-const addUser = async (req: Request, res: Response): Promise<void> => {
-    const result: IUser = await User.create(req.body);
-    const user: IUser = {
-        username: result.username,
-        password: result.password,
-        role: result.role,
-        email: result.email,
-        firstname: result.firstname,
-        lastname: result.lastname
+const addUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
+    const { userRole } = req;
+    let result;
+
+    if (userRole == 'ADMIN') {
+        result = await User.create(req.body);
+    } else if (userRole === 'USER') {
+        throw createError(400, "You don't have access")
     }
-    res.status(201).json(user);
+
+    res.status(201).json(result);
 }
 
-const getUser = async (req: Request, res: Response): Promise<void> => {
+const getUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
     const { id } = req.params;
-    const result = await User.findById(id);
+    const { userId, userRole } = req;
+    let result;
+
+    if (userRole == 'ADMIN' || userId?.toString() === id) {
+        result = await User.findById(id);
+    }
 
     if (!result) {
         throw createError(404, "Not found")
@@ -32,9 +49,16 @@ const getUser = async (req: Request, res: Response): Promise<void> => {
     res.json(result);
 }
 
-const deleteUser = async (req: Request, res: Response): Promise<void> => {
+const deleteUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
     const { id } = req.params;
-    const result = await User.findByIdAndDelete(id);
+    const { userRole } = req;
+    let result;
+
+    if (userRole == 'ADMIN') {
+        result = await User.findByIdAndDelete(id);
+    } else if (userRole === 'USER') {
+        throw createError(400, "You don't have access")
+    }
 
     if (!result) {
         throw createError(404, "Not found")
@@ -45,11 +69,17 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
     })
 }
 
-const editUser = async (req: Request, res: Response): Promise<void> => {
+const editUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
     const { id } = req.params;
-    const result: IUser | null = await User.findByIdAndUpdate(id, req.body, { new: true });
+    const { userId, userRole } = req;
+    let result;
+
+    if (userRole == 'ADMIN' || userId?.toString() === id) {
+        result = await User.findByIdAndUpdate(id, req.body, { new: true });
+    }
+
     if (!result) throw createError(404, "Not found");
-    res.status(200).json(result);
+    res.status(200).json(userDto(result));
 }
 
 export {

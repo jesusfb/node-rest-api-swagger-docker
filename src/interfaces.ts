@@ -2,7 +2,8 @@ import { Types } from 'mongoose';
 import { Request } from 'express';
 
 export interface IRequestWithUserId extends Request {
-    userId?: Types.ObjectId
+    userId?: Types.ObjectId,
+    userRole?: string
 }
 
 export interface IUser {

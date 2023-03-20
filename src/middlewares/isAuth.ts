@@ -18,9 +18,10 @@ const isAuth = (req: IRequestWithUserId, res: Response, next: NextFunction): voi
             throw createError(403, 'Пользователь не авторизован');
         }
   
-        const { id } = jwt.verify(token, SECRET) as JwtPayload;
+        const { id, role } = jwt.verify(token, SECRET) as JwtPayload;
 
         req.userId = id;
+        req.userRole = role;
         next();
     } catch (e) {
         console.log(e);

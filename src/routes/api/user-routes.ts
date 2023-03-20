@@ -8,15 +8,15 @@ import {
 } from '../../controllers/user-controller';
 
 import {schemas} from "../../models/User";
-import {isValidId, validation} from "../../middlewares";
+import {isAuth, isValidId, validation} from "../../middlewares";
 import {ctrlWrapper} from "../../helpers";
 
 const router = express.Router();
 
-router.get('/', ctrlWrapper(getUsers));
-router.post('/', validation(schemas.userAdd), ctrlWrapper(addUser));
-router.get('/:id', isValidId, ctrlWrapper(getUser));
-router.delete('/:id', isValidId, ctrlWrapper(deleteUser));
-router.patch('/:id', isValidId, validation(schemas.userUpdate), ctrlWrapper(editUser));
+router.get('/', isAuth, ctrlWrapper(getUsers));
+router.post('/', isAuth, validation(schemas.userAdd), ctrlWrapper(addUser));
+router.get('/:id', isAuth, isValidId, ctrlWrapper(getUser));
+router.delete('/:id', isAuth, isValidId, ctrlWrapper(deleteUser));
+router.patch('/:id', isAuth, isValidId, validation(schemas.userUpdate), ctrlWrapper(editUser));
 
 export default router;

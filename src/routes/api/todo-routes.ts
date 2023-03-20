@@ -7,10 +7,8 @@ import {
     editTodo
 } from '../../controllers/todo-controller';
 
-import {isAuth } from "../../middlewares";
-
 import {schemas} from "../../models/Todo";
-import {isValidId, validation} from "../../middlewares";
+import {isAuth, isValidId, validation} from "../../middlewares";
 import {ctrlWrapper} from "../../helpers";
 
 const router = express.Router();
