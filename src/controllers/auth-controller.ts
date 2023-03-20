@@ -2,7 +2,7 @@ import User from "../models/User";
 import {Request, Response} from "express";
 import bcrypt from "bcrypt";
 import { generateAccessToken } from '../helpers';
-import { IUser, IRequestWithUserId } from '../interfaces';
+import { IRequestWithUserId } from '../interfaces';
 import { userDto } from '../dto';
 
 import { createError } from "../helpers/index";
@@ -28,20 +28,20 @@ const login = async (req: IRequestWithUserId, res: Response): Promise<any> => {
     const user = await User.findOne({ username });
 
     if (!user) {
-        throw createError(400, `User ${username} not found`);
+        throw createError(404, `User ${username} not found`);
     }
 
     const validPassword = bcrypt.compareSync(password, user.password);
 
     if (!validPassword) {
-        throw createError(404, 'Wrong password entered');
+        throw createError(400, 'Wrong password entered');
     }
 
     const token = generateAccessToken(user._id, user.role);
-
+  
     if (token) {
         req.userId = user._id;
-        res.json({ token });
+        res.status(200).json({ token });
     } else {
         throw createError(400, 'Token error');
     }  

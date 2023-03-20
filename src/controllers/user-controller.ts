@@ -1,10 +1,9 @@
 import User from "../models/User";
-import {Request, Response} from "express";
-
+import { Response} from "express";
 import { createError } from "../helpers/index";
 import { IRequestWithUserId } from '../interfaces';
-
 import { userDto } from '../dto';
+import bcrypt from "bcrypt";
 
 const getUsers = async (req: IRequestWithUserId, res: Response): Promise<void>  => {
     const { userId, userRole } = req;
@@ -16,22 +15,29 @@ const getUsers = async (req: IRequestWithUserId, res: Response): Promise<void>  
         result = await User.findById(userId);
     }
 
-    result = await User.find();
-
-    res.json(result);
+    res.status(200).json(result);
 }
 
 const addUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
     const { userRole } = req;
-    let result;
+    const { username, password, role, email, firstname, lastname } = req.body;
 
     if (userRole == 'ADMIN') {
-        result = await User.create(req.body);
-    } else if (userRole === 'USER') {
-        throw createError(400, "You don't have access")
-    }
+        const candidate = await User.findOne({ username });
 
-    res.status(201).json(result);
+        if (candidate) {
+            throw createError(400, `User ${username} already exists`);
+        }
+
+        const hashPassword = bcrypt.hashSync(password, 7);
+        const user = new User({ username, password: hashPassword, role, email, firstname, lastname });
+        const result = await user.save();
+        
+        res.status(201).json(result);
+
+    } else if (userRole === 'USER') {
+        throw createError(403);
+    }
 }
 
 const getUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
@@ -44,7 +50,7 @@ const getUser = async (req: IRequestWithUserId, res: Response): Promise<void> =>
     }
 
     if (!result) {
-        throw createError(404, "Not found")
+        throw createError(404);
     }
     res.json(result);
 }
@@ -57,11 +63,11 @@ const deleteUser = async (req: IRequestWithUserId, res: Response): Promise<void>
     if (userRole == 'ADMIN') {
         result = await User.findByIdAndDelete(id);
     } else if (userRole === 'USER') {
-        throw createError(400, "You don't have access")
+        throw createError(403);
     }
 
     if (!result) {
-        throw createError(404, "Not found")
+        throw createError(404);
     }
 
     res.status(200).json({
@@ -78,7 +84,7 @@ const editUser = async (req: IRequestWithUserId, res: Response): Promise<void> =
         result = await User.findByIdAndUpdate(id, req.body, { new: true });
     }
 
-    if (!result) throw createError(404, "Not found");
+    if (!result) throw createError(404);
     res.status(200).json(userDto(result));
 }
 

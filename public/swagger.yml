@@ -1,0 +1,508 @@
+openapi: 3.0.3
+info:
+  title: Users with todo lists
+  version: 1.0.0
+servers: 
+  - url: http://localhost:3000/
+paths:
+  /api/auth/login:
+    post:
+      summary: "Issues a JWT token"
+      tags:
+        - Auth
+      operationId: login
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: "sergo"
+                  minimum: 2
+                  maximum: 255
+                password:
+                  type: string
+                  example: "sergo"
+                  minimum: 2
+                  maximum: 255
+      responses:
+        '200':
+          headers:
+            Api-Token:
+              $ref: "#/components/headers/Api-Token"
+          description: Login response successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        '400':
+          description: "Wrong password entered"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+
+  /api/auth/registration:
+      post:
+        summary: Register user
+        tags:
+          - Auth
+        operationId: registration
+        security: []
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                properties:
+                  username:
+                    type: string
+                    example: sergo
+                  password:
+                    type: string
+                    example: sergo
+                  role:
+                    type: string
+                    enum:
+                      - USER
+                      - ADMIN
+                    description: Access rights
+                  email:
+                    type: string
+                    example: sergo@gmail.com
+                  firstname:
+                    type: string
+                    example: Serhii
+                  lastname:
+                    type: string
+                    example: Pedos
+        responses:
+          '201':
+            description: Successful response with a registered user
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/User"
+          '400':
+            description: "User already exists"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error400"
+
+  /api/users:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      operationId: getUsers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Users"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+    post:
+      summary: Create a user
+      tags:
+        - Users
+      operationId: addUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: sergo
+                password:
+                  type: string
+                  example: sergo
+                role:
+                  type: string
+                  enum:
+                    - USER
+                    - ADMIN
+                  description: Access rights
+                email:
+                  type: string
+                  example: sergo@gmail.com
+                firstname:
+                  type: string
+                  example: Serhii
+                lastname:
+                  type: string
+                  example: Pedos
+      responses:
+        '201':
+          description: Successful response with created user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        '400':
+          description: "User already exists"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"   
+  /api/users/{user_id}:
+    get:
+      summary: Get user by ID
+      tags:
+        - Users
+      operationId: getUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: 6414218570da02fed5d5eb6b
+      responses:
+        '200':
+          description: Successful response with one user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        '404':
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+    delete:
+      summary: Delete user by ID
+      tags:
+        - Users
+      operationId: deleteUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: 6414218570da02fed5d5eb6b
+      responses:
+        '200':
+          description: Successful removal
+          content:
+            application/json: {}
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        '404':
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+
+  /api/todos:
+    get:
+      summary: Get all todos
+      tags:
+        - Todos
+      operationId: getTodos
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Todos"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+    post:
+      summary: Create a todo
+      tags:
+        - Todos
+      operationId: addTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  example: Some title
+                body:
+                  type: string
+                  example: Some body
+      responses:
+        '201':
+          description: Successful response with created todo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Todo"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+  /api/todos/{todo_id}:
+    get:
+      summary: Get todo by ID
+      tags:
+        - Todos
+      operationId: getTodo
+      parameters:
+        - name: todo_id
+          in: path
+          required: true
+          description: Todo ID
+          schema:
+            type: string
+          example: 6414218570da02fed5d5eb6b
+      responses:
+        '200':
+          description: Successful response with one todo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Todo"
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        '404':
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+    delete:
+      summary: Delete todo by ID
+      tags:
+        - Todos
+      operationId: deleteTodo
+      parameters:
+        - name: todo_id
+          in: path
+          required: true
+          description: Todo ID
+          schema:
+            type: string
+          example: 6414218570da02fed5d5eb6b
+      responses:
+        '200':
+          description: Successful removal
+          content:
+            application/json: {}
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        '404':
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
+  headers:
+    Api-Token:
+      schema:
+        type: string
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MTQyMTg1NzBkYTAyZmVkNWQ1ZWI2YiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTY3OTEzNzk3OSwiZXhwIjoxNjc5MjI0Mzc5fQ.Kk03XBKPF9rbhW8fui2qV9oo0M8FAyPMsWCy5U3l4do"
+        
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - password
+        - role
+        - email
+        - firstname
+        - lastname
+      properties:
+        _id:
+          type: string
+          example: 6414218570da02fed5d5eb6b
+        username:
+          type: string
+          example: sergo
+        password:
+          type: string
+          example: sergo
+        role:
+          type: string
+          enum:
+            - USER
+            - ADMIN
+          description: Access rights
+        email:
+          type: string
+          example: sergo@gmail.com
+        firstname:
+          type: string
+          example: Serhii
+        lastname:
+          type: string
+          example: Pedos
+        createdAt:
+          type: string
+          example: 2023-03-17T08:15:16.068+00:00
+          format: 2023-03-17T08:15:16.068+00:00
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+
+    Todo:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6414218570da02fed5d5eb6b
+        title:
+          type: string
+          example: Some title
+          minimum: 1
+        body:
+          type: string
+          example: Some body
+          minimum: 1
+        userId:
+          type: string
+          example: 6414218570da02fed5d5eb6b
+        createdAt:
+          type: string
+          example: 2023-03-17T08:15:16.068+00:00
+          format: 2023-03-17T08:15:16.068+00:00
+    Todos:
+      type: array
+      items:
+        $ref: "#/components/schemas/Todo"
+
+    Error400:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad Request
+    Error401:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Unauthorized
+    Error403:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: integer
+          example: 403
+        message:
+          type: string
+          example: Forbidden
+    Error404:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+
+security:
+  - bearerAuth: []

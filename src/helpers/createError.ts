@@ -7,7 +7,8 @@ const messages: IMessages= {
     401: "Unauthorized",
     403: "Forbidden",
     404: "Not found",
-    409: "Conflict"
+    409: "Conflict",
+    422: "Syntax error"
 }
 
 const createError = (status: number, message: string = messages[status]): Error => {

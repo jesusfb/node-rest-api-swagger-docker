@@ -12,10 +12,10 @@ const isAuth = (req: IRequestWithUserId, res: Response, next: NextFunction): voi
     }
  
     try {
-        const token = req.headers.authorization?.split(' ')[1];;
+        const token = req.headers.authorization?.split(' ')[1];
 
         if (!token) {
-            throw createError(403, 'Пользователь не авторизован');
+            throw createError(401);
         }
   
         const { id, role } = jwt.verify(token, SECRET) as JwtPayload;
@@ -23,9 +23,9 @@ const isAuth = (req: IRequestWithUserId, res: Response, next: NextFunction): voi
         req.userId = id;
         req.userRole = role;
         next();
-    } catch (e) {
-        console.log(e);
-        throw createError(403, 'Пользователь не авторизован');
+    } catch (error: any) {
+        console.log(error.message);
+        throw createError(401);
     }
 }
 
