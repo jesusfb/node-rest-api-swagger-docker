@@ -7,7 +7,7 @@ const generateAccessToken = (id: Types.ObjectId, role: string): string => {
         id,
         role,
     }
-    return jwt.sign(payload, SECRET, {expiresIn: '30sec'});
+    return jwt.sign(payload, SECRET, {expiresIn: '24h'});
 }
 
 export default generateAccessToken

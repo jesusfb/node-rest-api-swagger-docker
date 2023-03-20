@@ -7,7 +7,8 @@ import { ITodo } from '../interfaces';
 
 const todoSchema = new Schema<ITodo>({
     title: {type: String, required: true},
-    body: {type: String, required: true}
+    body: {type: String, required: true},
+    userId: {type: Schema.Types.ObjectId, ref: 'User'}
 }, { timestamps: true} );
 
 const todoAdd = Joi.object({

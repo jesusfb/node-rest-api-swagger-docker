@@ -39,7 +39,6 @@ export const schemas = {
 
 const handleErrors = (error: RequestError, data: Document, next: NextFunction)=> {
     const {name, code} = error;
-    console.log('test');
     
     if(name === "MongoServerError" && code === 11000) {
         error.status = 409;

@@ -1,12 +1,14 @@
 import { ITodo } from '../interfaces';
+import { Types } from 'mongoose';
 
-const userDto = (todo: {title: string; body: string}): ITodo => {
+const todorDto = (todo: {title: string; body: string, userId: Types.ObjectId}): ITodo => {
     const result: ITodo = {
         title: todo.title,
-        body: todo.body
+        body: todo.body,
+        userId: todo.userId
     }
 
     return result
 }
 
-export default userDto
+export default todorDto

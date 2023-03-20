@@ -2,8 +2,11 @@ import {Request, Response, NextFunction} from "express";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../../config";
 import { createError } from "../helpers/index";
+import type { JwtPayload } from "jsonwebtoken"
 
-const isAuth = (req: Request, res: Response, next: NextFunction): void => { 
+import { IRequestWithUserId } from '../interfaces';
+
+const isAuth = (req: IRequestWithUserId, res: Response, next: NextFunction): void => { 
     if (req.method === 'OPTIONS') {
         next()
     }
@@ -15,10 +18,9 @@ const isAuth = (req: Request, res: Response, next: NextFunction): void => {
             throw createError(403, 'Пользователь не авторизован');
         }
   
-        const decodedData = jwt.verify(token, SECRET);
-        // console.log(decodedData);
-        
-        // req.user: any = decodedData;
+        const { id } = jwt.verify(token, SECRET) as JwtPayload;
+
+        req.userId = id;
         next();
     } catch (e) {
         console.log(e);

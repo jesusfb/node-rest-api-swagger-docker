@@ -1,3 +1,10 @@
+import { Types } from 'mongoose';
+import { Request } from 'express';
+
+export interface IRequestWithUserId extends Request {
+    userId?: Types.ObjectId
+}
+
 export interface IUser {
     username: string,
     password: string,
@@ -9,5 +16,6 @@ export interface IUser {
 
 export interface ITodo {
     title: string,
-    body: string
+    body: string,
+    userId: Types.ObjectId
 }

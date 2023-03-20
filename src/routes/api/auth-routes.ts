@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.post('/registration', ctrlWrapper(registration));
-router.post('/login', ctrlWrapper(login));
+router.post('/login', [], ctrlWrapper(login));
 router.get('/users', isAuth, rolePermission(['ADMIN']), ctrlWrapper(getUsers));
 
 export default router;

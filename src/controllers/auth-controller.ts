@@ -2,7 +2,7 @@ import User from "../models/User";
 import {Request, Response} from "express";
 import bcrypt from "bcrypt";
 import { generateAccessToken } from '../helpers';
-import { IUser } from '../interfaces';
+import { IUser, IRequestWithUserId } from '../interfaces';
 import { userDto } from '../dto';
 
 import { createError } from "../helpers/index";
@@ -23,7 +23,7 @@ const registration = async (req: Request, res: Response): Promise<void> => {
     res.status(201).json(result);
 }
 
-const login = async (req: Request, res: Response): Promise<any> => {
+const login = async (req: IRequestWithUserId, res: Response): Promise<any> => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
 
@@ -40,6 +40,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
     const token = generateAccessToken(user._id, user.role);
 
     if (token) {
+        req.userId = user._id;
         res.json({ token });
     } else {
         throw createError(400, 'Token error');
