@@ -1,6 +1,6 @@
 import mongoose, {Document} from "mongoose";
 import {NextFunction} from "express";
-import {RequestError} from "../app";
+import { RequestError } from '../interfaces';
 import Joi from "joi";
 const {Schema, model} = mongoose;
 import { ITodo } from '../interfaces';

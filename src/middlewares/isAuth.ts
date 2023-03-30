@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../../config";
+import { JWT_SECRET } from "../config";
 import { createError } from "../helpers/index";
 import type { JwtPayload } from "jsonwebtoken"
 

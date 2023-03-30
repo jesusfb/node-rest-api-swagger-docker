@@ -1,4 +1,4 @@
-import {RequestError} from "../app";
+import { RequestError } from '../interfaces';
 interface IMessages {
     [code:number]: string
 }

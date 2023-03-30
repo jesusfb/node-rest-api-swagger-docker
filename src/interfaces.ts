@@ -6,6 +6,11 @@ export interface IRequestWithUserId extends Request {
     userRole?: string
 }
 
+export interface RequestError extends Error {
+    status?: number,
+    code?: number
+}
+
 export interface IUser {
     username: string,
     password: string,

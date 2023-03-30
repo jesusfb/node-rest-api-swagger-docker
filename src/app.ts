@@ -4,14 +4,10 @@ import mongoose from "mongoose";
 import todoRoutes from "./routes/api/todo-routes";
 import userRoutes from "./routes/api/user-routes";
 import authRoutes from "./routes/api/auth-routes";
-import {MONGO_URI, PORT} from '../config';
+import {MONGO_URI, PORT} from './config';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-
-export interface RequestError extends Error {
-    status?: number,
-    code?: number
-}
+import { RequestError } from './interfaces';
 
 const app: Express = express();
 
@@ -38,7 +34,8 @@ app.use((error:RequestError, req: Request, res:Response, next: NextFunction): vo
 });
 
 mongoose
-    .connect(MONGO_URI)
+    .connect(MONGO_URI, 
+        { useNewUrlParser: true, useUnifiedTopology: true })
     .then(()=> {
         console.log("DataBase connected...")
         app.listen(PORT);

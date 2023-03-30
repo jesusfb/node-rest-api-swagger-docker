@@ -1,4 +1,4 @@
-import { JWT_SECRET } from '../../config';
+import { JWT_SECRET } from '../config';
 import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
 
