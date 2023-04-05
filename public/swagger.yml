@@ -5,6 +5,62 @@ info:
 servers: 
   - url: http://localhost:3000/
 paths:
+  /api/auth/registration:
+    post:
+      summary: Register user
+      tags:
+        - Auth
+      operationId: registration
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: sergo
+                password:
+                  type: string
+                  example: sergo
+                role:
+                  type: string
+                  enum:
+                    - USER
+                    - ADMIN
+                  description: Access rights
+                email:
+                  type: string
+                  example: sergo@gmail.com
+                firstname:
+                  type: string
+                  example: Serhii
+                lastname:
+                  type: string
+                  example: Pedos
+      responses:
+        '201':
+          description: Successful response with a registered user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        '400':
+          description: "User already exists"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+
   /api/auth/login:
     post:
       summary: "Issues a JWT token"
@@ -39,68 +95,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/User"
-        '404':
-          description: "User not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error404"
         '400':
           description: "Wrong password entered"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error400"
-
-  /api/auth/registration:
-      post:
-        summary: Register user
-        tags:
-          - Auth
-        operationId: registration
-        security: []
-        requestBody:
-          required: true
+        '404':
+          description: "User not found"
           content:
             application/json:
               schema:
-                properties:
-                  username:
-                    type: string
-                    example: sergo
-                  password:
-                    type: string
-                    example: sergo
-                  role:
-                    type: string
-                    enum:
-                      - USER
-                      - ADMIN
-                    description: Access rights
-                  email:
-                    type: string
-                    example: sergo@gmail.com
-                  firstname:
-                    type: string
-                    example: Serhii
-                  lastname:
-                    type: string
-                    example: Pedos
-        responses:
-          '201':
-            description: Successful response with a registered user
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/User"
-          '400':
-            description: "User already exists"
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Error400"
+                $ref: "#/components/schemas/Error404"
 
   /api/users:
     get:
@@ -181,7 +187,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error403"   
+                $ref: "#/components/schemas/Error403"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
   /api/users/{user_id}:
     get:
       summary: Get user by ID
@@ -205,18 +217,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/User"
+        '400':
+          description: "Wrong password entered"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
         '401':
           description: "Unauthorized"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error401"
-        '404':
-          description: "Not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error404"
     delete:
       summary: Delete user by ID
       tags:
@@ -235,6 +247,12 @@ paths:
           description: Successful removal
           content:
             application/json: {}
+        '400':
+          description: "Wrong password entered"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
         '401':
           description: "Unauthorized"
           content:
@@ -247,12 +265,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error403"
-        '404':
-          description: "Not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error404"
 
   /api/todos:
     get:
@@ -307,6 +319,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error401"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
   /api/todos/{todo_id}:
     get:
       summary: Get todo by ID
@@ -330,18 +348,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Todo"
+        '400':
+          description: "User already exists"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
         '401':
           description: "Unauthorized"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error401"
-        '404':
-          description: "Not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error404"
     delete:
       summary: Delete todo by ID
       tags:
@@ -360,18 +378,18 @@ paths:
           description: Successful removal
           content:
             application/json: {}
+        '400':
+          description: "User already exists"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
         '401':
           description: "Unauthorized"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error401"
-        '404':
-          description: "Not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error404"
 components:
   securitySchemes:
     bearerAuth:

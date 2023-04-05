@@ -18,7 +18,7 @@ const registration = async (req: Request, res: Response): Promise<void> => {
 
     const hashPassword = bcrypt.hashSync(password, 7);
     const user = new User({ username, password: hashPassword, role, email, firstname, lastname });
-    const result = userDto(await user.save());
+    const result = await user.save();
     
     res.status(201).json(result);
 }

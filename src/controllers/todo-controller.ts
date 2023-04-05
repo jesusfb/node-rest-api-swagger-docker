@@ -31,16 +31,12 @@ const getTodo = async (req: IRequestWithUserId, res: Response): Promise<void> =>
     let result: any;
 
     if (userRole == 'ADMIN') {
-        result = await Todo.findById(id);
+        result = [await Todo.findById(id)];
     } else {
         result = await Todo.findById(id).find({ userId: userId });
     }
-
-    if (result.length == 0 || !result) {
-        throw createError(404);
-    }
     
-    res.json(result);
+    res.status(200).json(result[0]);
 }
 
 const deleteTodo = async (req: IRequestWithUserId, res: Response): Promise<void> => {

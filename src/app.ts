@@ -34,8 +34,11 @@ app.use((error:RequestError, req: Request, res:Response, next: NextFunction): vo
 });
 
 mongoose
+    .set('useNewUrlParser', true)
+    .set('useFindAndModify', false)
+    .set('useCreateIndex', true)
     .connect(MONGO_URI, 
-        { useNewUrlParser: true, useUnifiedTopology: true })
+        { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
     .then(()=> {
         console.log("DataBase connected...")
         app.listen(PORT);
@@ -45,3 +48,5 @@ mongoose
         console.log(error.message);
         process.exit(1);
     })
+
+export default app;

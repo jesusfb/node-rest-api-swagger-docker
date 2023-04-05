@@ -42,16 +42,13 @@ const addUser = async (req: IRequestWithUserId, res: Response): Promise<void> =>
 
 const getUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
     const { id } = req.params;
-    const { userRole } = req;
+    const {userId, userRole } = req;
     let result;
 
-    if (userRole == 'ADMIN') {
+    if (userRole == 'ADMIN' || userId?.toString() === id) {
         result = await User.findById(id);
     }
 
-    if (!result) {
-        throw createError(404);
-    }
     res.json(result);
 }
 
@@ -67,7 +64,7 @@ const deleteUser = async (req: IRequestWithUserId, res: Response): Promise<void>
     }
 
     if (!result) {
-        throw createError(404);
+        throw createError(400);
     }
 
     res.status(200).json({
@@ -84,7 +81,7 @@ const editUser = async (req: IRequestWithUserId, res: Response): Promise<void> =
         result = await User.findByIdAndUpdate(id, req.body, { new: true });
     }
 
-    if (!result) throw createError(404);
+    if (!result) throw createError(400);
     res.status(200).json(userDto(result));
 }
 
