@@ -2,7 +2,7 @@ import { RequestError } from '../interfaces';
 interface IMessages {
     [code:number]: string
 }
-const messages: IMessages= {
+const messages: IMessages = {
     400: "Bad Request",
     401: "Unauthorized",
     403: "Forbidden",

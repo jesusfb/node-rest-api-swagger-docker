@@ -27,8 +27,7 @@ const addTodo = async (req: IRequestWithUserId, res: Response): Promise<void> =>
 const getTodo = async (req: IRequestWithUserId, res: Response): Promise<void> => {
     const { id } = req.params;
     const { userId, userRole } = req;
-
-    let result: any;
+    let result;
 
     if (userRole == 'ADMIN') {
         result = [await Todo.findById(id)];
@@ -36,6 +35,7 @@ const getTodo = async (req: IRequestWithUserId, res: Response): Promise<void> =>
         result = await Todo.findById(id).find({ userId: userId });
     }
     
+    if (!result.length) throw createError(404);
     res.status(200).json(result[0]);
 }
 
@@ -48,32 +48,38 @@ const deleteTodo = async (req: IRequestWithUserId, res: Response): Promise<void>
         result = await Todo.findByIdAndDelete(id)
     } else {
         result = await Todo.findOne({ _id: id, userId: userId });
+
+        if (result) {
+            await Todo.findByIdAndDelete(id);
+        }
     }
 
-    if (result) {
-        await Todo.findByIdAndDelete(id);
-
-        res.status(200).json({
-            message: "todo deleted"
-        });
-    } else {
-        throw createError(404);
-    }
+    if (!result) throw createError(404);
+    res.status(200).json({
+        message: "todo deleted"
+    });
 }
 
 const editTodo = async (req: IRequestWithUserId, res: Response): Promise<void> => {
     const { id } = req.params;
-    const userId = req.userId;
+    const { userId, userRole } = req;
     let result;
 
-    const todo = await Todo.findOne({ _id: id, userId: userId });
-
-    if (todo) {
+    if (userRole == 'ADMIN') {
         result = await Todo.findByIdAndUpdate(id, req.body, { new: true });
+
+        if (!result) throw createError(404);
+    } else if (userRole === 'USER') {
+        let todo = await Todo.findById(id).find({ userId: userId });
+
+        if (todo.length) {
+            result = await Todo.findByIdAndUpdate(id, req.body, { new: true });
+        }
+
+        if (!result) throw createError(403);
     }
 
-    if (!result) throw createError(404);
-    res.status(200).json(todoDto(result));
+    res.status(200).json(result);
 }
 
 export {

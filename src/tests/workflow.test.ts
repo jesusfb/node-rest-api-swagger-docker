@@ -7,7 +7,7 @@ import app from '../app';
 import User from '../models/User';
 import Todo from '../models/Todo';
 
-import { defaultUserData, userPostData, defaultTodo, postTodo } from './mocks/data.mock'
+import { defaultUserData, userPostData, defaultTodo, postTodo } from './mocks/data.mock';
 
 chai.use(chaiHttp);
 

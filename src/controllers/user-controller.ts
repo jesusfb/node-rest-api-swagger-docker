@@ -34,7 +34,6 @@ const addUser = async (req: IRequestWithUserId, res: Response): Promise<void> =>
         const result = await user.save();
         
         res.status(201).json(result);
-
     } else if (userRole === 'USER') {
         throw createError(403);
     }
@@ -49,7 +48,8 @@ const getUser = async (req: IRequestWithUserId, res: Response): Promise<void> =>
         result = await User.findById(id);
     }
 
-    res.json(result);
+    if (!result) throw createError(404);
+    res.status(200).json(result);
 }
 
 const deleteUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
@@ -63,9 +63,7 @@ const deleteUser = async (req: IRequestWithUserId, res: Response): Promise<void>
         throw createError(403);
     }
 
-    if (!result) {
-        throw createError(400);
-    }
+    if (!result) throw createError(404);
 
     res.status(200).json({
         message: "user deleted"

@@ -7,11 +7,11 @@ This is a node.js based REST CURD demo project, providing general functions like
 - SwaggerUI & OpenApi 3.0
 - Node.js
 - Express.js
-- TypeScript
 - CORS
 - Rest API
 - MongoDB & Mongoose
 - APIs Authorization (JWT)
+- Docker
 
 # How to use
 
@@ -28,43 +28,67 @@ cd node-express-typescript-swagger-rest-api && npm i
 
 ## 3. Connecting to Database
 
-### Connect to DB remotely:
+### Default DB URI is as follows:
 
-Change DB URIs in .env file.
-Please make sure mongoDB Server service is installed and running on your localhost:3000.
+Please make sure mongoDB Server service is installed and running on your localhost:27017.
+
+```
+MONGO_URI=mongodb://localhost:27017/db
+```
+
+> Alternatively, if you would like to connect DB remotely, just change DB URI in `.env` file.
+
 > For more details about MongoDB, click [here](https://www.mongodb.com/).
 
 ## 4. Setting environment file `.env`.
 
 Simply copy `.env.sample` as `.env`, then edit it based on your need.
 ```
-# App config
-PORT=3000
+JWT_SECRET='SECRET_VALUE'
+DOCKER_MONGO_URI=mongodb://mongo:27017/node-app
+MONGO_URI=mongodb://localhost:27017/db
+MONGODB_LOCAL_PORT=27017
+MONGODB_DOCKER_PORT=27017
 
-# Default DB URI
-MONGO_URI=mongodb+srv://<username>:<password>@<clustername>.cm9ty.mongodb.net/<collectionname>?retryWrites=true&w=majority
-
-# Random sercet used for generating API accessToken
-JWT_SECRET=%some_secrets%
+NODE_LOCAL_PORT=80
+NODE_DOCKER_PORT=4000
 
 ```
 
 ## 5. Start project
 
-Use 2 terminals at once:
-1. To compile TypeScript files
 ```
-npm run watch
-```
-2. Start the server
-```
-npm run dev
+npm run dev-local
 ```
 
-## 6. Play with APIs now !
+## 6. Test project
+
+```
+npm run test
+```
+
+## 7. Play with APIs now !
 Now, you are ready to test all APIs.
-Just simply open your browser http://localhost:3000/api-docs.
+Just simply open your browser http://localhost/api-docs.
+#### If you run docker:
+Just simply open your browser http://localhost:4000/api-docs.
 
+# Docker
+
+> #### Docker need to be installed in your OS. To install Docker, please click [here](https://docs.docker.com/get-docker/) .
+
+> #### Please make sure you have followed Step 1 ~ Step 4 as above.
+
+### Under the root path of project, start Docker service
+
+Development:
+```
+npm run docker-compose-up:dev
+```
+Production:
+```
+npm run docker-compose-up:prod
+```
 # Access rights
 
 APIs implement access logic for `ADMIN` and `USER` [roles](#table)
