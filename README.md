@@ -7,6 +7,7 @@ This is a node.js based REST CURD demo project, providing general functions like
 - SwaggerUI & OpenApi 3.0
 - Node.js
 - Express.js
+- TypeScript
 - CORS
 - Rest API
 - MongoDB & Mongoose

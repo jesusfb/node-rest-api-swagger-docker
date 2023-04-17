@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/src/app.js",
   "scripts": {
-    "dev-local": "NODE_ENV=test npm run build && nodemon ./dist/src/app",
+    "dev-local": "npm run build && NODE_ENV=test nodemon ./dist/src/app",
     "test": "NODE_ENV=test mocha --timeout 10000 -r ts-node/register ./dist/src/tests/launchTest.spec.js --exit",
     "dev": "ts-node-dev --poll src/app.ts",
     "build": "rimraf ./dist && tsc",
