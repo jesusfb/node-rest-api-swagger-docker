@@ -20,7 +20,7 @@ This is a restful-api for two types of users - `ADMIN`, `USER`. Two models are i
 
 ## 1. Clone Project into your local machine
 ```
-git clone https://github.com/SerhiiNikif/node-express-typescript-swagger-rest-api.git
+git clone https://github.com/SerhiiNikif/node-rest-api-swagger-docker.git
 ```
 
 ## 2. Go into project folder
