@@ -1,17 +1,19 @@
 # Node-Rest-Api-Swagger
 
-This is a node.js based REST CURD demo project, providing general functions like User Signup and Login, APIs Authorization, using REST Apis to create/update/get/delete users and todo lists. You can register a user with two roles: `ADMIN` and `USER`. After login, specific actions are available for each role.
+This is a restful-api for two types of users - `ADMIN`, `USER`. Two models are implemented: users and todo lists. After logging in, each user can create todo lists. A usual user can perform CRUD operations only for their todo lists, an administrator can fault CRUD operations for any todo lists + CRUD for users.
 # Knowledge Cover
 
-- CURD Operation
-- SwaggerUI & OpenApi 3.0
-- Node.js
-- Express.js
+- Node.js (Express.js)
 - TypeScript
-- CORS
 - Rest API
 - MongoDB & Mongoose
+- CRUD Operation
+- API documentation on Swagger
 - APIs Authorization (JWT)
+- CORS
+- Field validation
+- Error handling
+- Mocha, Chai
 - Docker
 
 # How to use
@@ -21,67 +23,28 @@ This is a node.js based REST CURD demo project, providing general functions like
 git clone https://github.com/SerhiiNikif/node-express-typescript-swagger-rest-api.git
 ```
 
-## 2. Go into project folder and install project dependencies.
+## 2. Go into project folder
 
 ```
-cd node-express-typescript-swagger-rest-api && npm i
+cd node-rest-api-swagger-docker
 ```
 
-## 3. Connecting to Database
-
-### Default DB URI is as follows:
-
-Please make sure mongoDB Server service is installed and running on your localhost:27017.
-
-```
-MONGO_URI=mongodb://localhost:27017/db
-```
-
-> Alternatively, if you would like to connect DB remotely, just change DB URI in `.env` file.
-
-> For more details about MongoDB, click [here](https://www.mongodb.com/).
-
-## 4. Setting environment file `.env`.
-
-Simply copy `.env.sample` as `.env`, then edit it based on your need.
+## 3. Setting environment file .env.
+Create an `.env` file in the root of the project and fill it with the values ​​from the `.env.sample` file.
 ```
 JWT_SECRET='SECRET_VALUE'
-DOCKER_MONGO_URI=mongodb://mongo:27017/node-app
-MONGO_URI=mongodb://localhost:27017/db
-MONGODB_LOCAL_PORT=27017
-MONGODB_DOCKER_PORT=27017
 
-NODE_LOCAL_PORT=80
+MONGO_LOCAL_URI=mongodb://localhost:27017/db
+MONGO_LOCAL_PORT=27017
+NODE_LOCAL_PORT=3000
+
+MONGO_DOCKER_URI=mongodb://mongo:27017/node-app
+MONGO_DOCKER_PORT=27017
 NODE_DOCKER_PORT=4000
-
 ```
 
-## 5. Start project
-
-```
-npm run dev-local
-```
-
-## 6. Test project
-
-```
-npm run test
-```
-
-## 7. Play with APIs now !
-Now, you are ready to test all APIs.
-Just simply open your browser http://localhost/api-docs.
-#### If you run docker:
-Just simply open your browser http://localhost:4000/api-docs.
-
-# Docker
-
-> #### Docker need to be installed in your OS. To install Docker, please click [here](https://docs.docker.com/get-docker/) .
-
-> #### Please make sure you have followed Step 1 ~ Step 4 as above.
-
-### Under the root path of project, start Docker service
-
+## 4. Start project
+> #### Docker need to be installed in your OS. To install Docker, please click [here](https://docs.docker.com/get-docker/).
 Development:
 ```
 npm run docker-compose-up:dev
@@ -90,6 +53,33 @@ Production:
 ```
 npm run docker-compose-up:prod
 ```
+
+## 5. Play with APIs now !
+Now, you are ready to test all APIs.
+Just simply open your browser http://localhost:3000/api-docs.
+
+
+
+## 6. Use app locally:
+> #### Please make sure you have followed Step 1 ~ Step 3 as above.
+Please make sure mongoDB Server service is installed and running on your localhost:27017.
+
+```
+npm install
+```
+
+```
+npm run dev-local
+```
+Open your browser http://localhost:3000/api-docs.
+
+
+## 7. Test project
+
+```
+npm run test
+```
+
 # Access rights
 
 APIs implement access logic for `ADMIN` and `USER` [roles](#table)

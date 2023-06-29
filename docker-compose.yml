@@ -1,7 +1,7 @@
 version: "3"
 services:
   node-app:
-    container_name: docker-node
+    container_name: node-app
     restart: always
     depends_on:
       - mongo
@@ -17,7 +17,7 @@ services:
       - db:/data/db
     env_file: ./.env
     ports:
-      - $MONGODB_LOCAL_PORT:$MONGODB_DOCKER_PORT
+      - $MONGO_LOCAL_PORT:$MONGO_DOCKER_PORT
   
 volumes:
   db:
