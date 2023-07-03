@@ -1,11 +1,11 @@
 import User from "../models/User";
 import {Request, Response} from "express";
 import bcrypt from "bcrypt";
-import { generateAccessToken } from '../helpers';
+import generateAccessToken from '../helpers/auth/generateAccessToken';
 import { IRequestWithUserId } from '../interfaces';
 import { userDto } from '../dto';
 
-import { createError } from "../helpers/index";
+import createError from "../helpers/errors/createError";
 
 const registration = async (req: Request, res: Response): Promise<void> => {
     const { username, password, role, email, firstname, lastname } = req.body;

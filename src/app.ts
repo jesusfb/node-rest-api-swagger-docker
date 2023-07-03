@@ -1,12 +1,12 @@
 import express, {Express, Request, Response, NextFunction} from "express";
 import cors from "./middlewares/cors";
-import mongoose from "mongoose";
-import todoRoutes from "./routes/api/todo-routes";
-import userRoutes from "./routes/api/user-routes";
-import authRoutes from "./routes/api/auth-routes";
-import {MONGO_URI, PORT} from './config';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
+
+import todoRoutes from "./routes/todo.router";
+import userRoutes from "./routes/user.router";
+import authRoutes from "./routes/auth.router";
+
 import { RequestError } from './interfaces';
 
 const app: Express = express();
@@ -20,6 +20,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get("/ping", (req, res) => {
+    res.json({message: "TodoListService.Version1.0.0"});
+});
+
 app.use('/api/todos/', todoRoutes);
 app.use('/api/users/', userRoutes);
 app.use('/api/auth/', authRoutes);
@@ -32,21 +36,5 @@ app.use((error:RequestError, req: Request, res:Response, next: NextFunction): vo
     const {status = 500, message = "Server error"} = error;
     res.status(status).json({message})
 });
-
-mongoose
-    .set('useNewUrlParser', true)
-    .set('useFindAndModify', false)
-    .set('useCreateIndex', true)
-    .connect(MONGO_URI, 
-        { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
-    .then(()=> {
-        console.log("DataBase connected...")
-        app.listen(PORT);
-        console.log(`Server running on port ${PORT}`)
-    })
-    .catch((error): void => {
-        console.log(error.message);
-        process.exit(1);
-    })
 
 export default app;

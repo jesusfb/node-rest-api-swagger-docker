@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
-import { createError } from "../helpers/index";
+import createError from "../helpers/errors/createError";
 import type { JwtPayload } from "jsonwebtoken"
 
 import { IRequestWithUserId } from '../interfaces';

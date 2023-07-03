@@ -1,4 +1,4 @@
-import { RequestError } from '../interfaces';
+import { RequestError } from '../../interfaces';
 interface IMessages {
     [code:number]: string
 }

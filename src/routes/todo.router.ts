@@ -5,11 +5,11 @@ import {
     getTodo,
     deleteTodo,
     editTodo
-} from '../../controllers/todo-controller';
+} from '../controllers/todo.controller';
 
-import {schemas} from "../../models/Todo";
-import {isAuth, isValidId, validation} from "../../middlewares";
-import {ctrlWrapper} from "../../helpers";
+import {schemas} from "../models/Todo";
+import {isAuth, isValidId, validation} from "../middlewares";
+import ctrlWrapper from "../helpers/errors/ctrlWrapper";
 
 const router = express.Router();
 

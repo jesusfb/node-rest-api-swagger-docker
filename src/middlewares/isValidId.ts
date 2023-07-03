@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import {Response, Request, NextFunction} from "express";
-import { createError } from "../helpers";
+import createError from "../helpers/errors/createError";
 
 const {isValidObjectId} = mongoose;
 

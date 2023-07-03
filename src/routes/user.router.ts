@@ -5,11 +5,11 @@ import {
     getUser,
     deleteUser,
     editUser
-} from '../../controllers/user-controller';
+} from '../controllers/user.controller';
 
-import {schemas} from "../../models/User";
-import {isAuth, isValidId, validation} from "../../middlewares";
-import {ctrlWrapper} from "../../helpers";
+import {schemas} from "../models/User";
+import {isAuth, isValidId, validation} from "../middlewares";
+import ctrlWrapper from "../helpers/errors/ctrlWrapper";
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import User from "../models/User";
 import { Response} from "express";
-import { createError } from "../helpers/index";
+import createError from "../helpers/errors/createError";
 import { IRequestWithUserId } from '../interfaces';
 import { userDto } from '../dto';
 import bcrypt from "bcrypt";

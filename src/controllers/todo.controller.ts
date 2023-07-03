@@ -1,7 +1,7 @@
 import Todo from "../models/Todo";
 import { IRequestWithUserId } from '../interfaces';
 import {Response} from "express";
-import { createError } from "../helpers/index";
+import createError from "../helpers/errors/createError";
 import { todoDto } from '../dto';
 
 const getTodos = async (req: IRequestWithUserId, res: Response): Promise<void>  => {
