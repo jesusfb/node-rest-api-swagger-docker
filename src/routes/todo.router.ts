@@ -1,10 +1,10 @@
 import express from "express";
 import {
-    getTodos, 
-    addTodo,
-    getTodo,
-    deleteTodo,
-    editTodo
+    getTodosController, 
+    addTodoController,
+    getTodoByIdController,
+    deleteTodoController,
+    editTodoController
 } from '../controllers/todo.controller';
 
 import {schemas} from "../models/Todo";
@@ -13,10 +13,10 @@ import ctrlWrapper from "../helpers/errors/ctrlWrapper";
 
 const router = express.Router();
 
-router.get('/', isAuth, ctrlWrapper(getTodos));
-router.post('/', isAuth, validation(schemas.todoAdd), ctrlWrapper(addTodo));
-router.get('/:id', isAuth, isValidId, ctrlWrapper(getTodo));
-router.delete('/:id', isAuth, isValidId, ctrlWrapper(deleteTodo));
-router.patch('/:id', isAuth, isValidId, validation(schemas.todoUpdate), ctrlWrapper(editTodo));
+router.get('/', isAuth, ctrlWrapper(getTodosController));
+router.post('/', isAuth, validation(schemas.todoAdd), ctrlWrapper(addTodoController));
+router.get('/:id', isAuth, isValidId, ctrlWrapper(getTodoByIdController));
+router.delete('/:id', isAuth, isValidId, ctrlWrapper(deleteTodoController));
+router.patch('/:id', isAuth, isValidId, validation(schemas.todoUpdate), ctrlWrapper(editTodoController));
 
 export default router;
