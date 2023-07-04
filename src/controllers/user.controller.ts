@@ -1,92 +1,66 @@
-import { User } from "../models/User";
 import { Response} from "express";
-import createError from "../helpers/errors/createError";
 import { IRequestWithUserId } from '../interfaces';
-import { userDto } from '../dto';
-import bcrypt from "bcrypt";
 
-const getUsers = async (req: IRequestWithUserId, res: Response): Promise<void>  => {
-    const { userId, userRole } = req;
-    let result;
-
-    if (userRole == 'ADMIN') {
-        result = await User.find();
-    } else {
-        result = await User.findById(userId);
-    }
-
-    res.status(200).json(result);
-}
-
-const addUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
-    const { userRole } = req;
-    const { username, password, role, email, firstname, lastname } = req.body;
-
-    if (userRole == 'ADMIN') {
-        const candidate = await User.findOne({ username });
-
-        if (candidate) {
-            throw createError(400, `User ${username} already exists`);
-        }
-
-        const hashPassword = bcrypt.hashSync(password, 7);
-        const user = new User({ username, password: hashPassword, role, email, firstname, lastname });
-        const result = await user.save();
-        
-        res.status(201).json(result);
-    } else if (userRole === 'USER') {
-        throw createError(403);
-    }
-}
-
-const getUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const {userId, userRole } = req;
-    let result;
-
-    if (userRole == 'ADMIN' || userId?.toString() === id) {
-        result = await User.findById(id);
-    }
-
-    if (!result) throw createError(404);
-    res.status(200).json(result);
-}
-
-const deleteUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const { userRole } = req;
-    let result;
-
-    if (userRole == 'ADMIN') {
-        result = await User.findByIdAndDelete(id);
-    } else if (userRole === 'USER') {
-        throw createError(403);
-    }
-
-    if (!result) throw createError(404);
-
-    res.status(200).json({
-        message: "user deleted"
-    })
-}
-
-const editUser = async (req: IRequestWithUserId, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const { userId, userRole } = req;
-    let result;
-
-    if (userRole == 'ADMIN' || userId?.toString() === id) {
-        result = await User.findByIdAndUpdate(id, req.body, { new: true });
-    }
-
-    if (!result) throw createError(400);
-    res.status(200).json(userDto(result));
-}
-
-export {
+import {
     getUsers,
     addUser,
     getUser,
     deleteUser,
     editUser
+} from "../services/user.service";
+
+const getUsersController = async (req: IRequestWithUserId, res: Response): Promise<void> => {
+    const getUsersService = await getUsers(
+        req.userId, 
+        req.userRole
+    );
+    res.status(200).json(getUsersService);
+}
+
+const addUserController = async (req: IRequestWithUserId, res: Response): Promise<void> => {
+    const addUserService = await addUser(
+        req.userRole,
+        req.body.username,
+        req.body.password,
+        req.body.role,
+        req.body.email,
+        req.body.firstname,
+        req.body.lastname
+    );
+    res.status(201).json(addUserService);
+}
+
+const getUserByIdController = async (req: IRequestWithUserId, res: Response): Promise<void> => {
+    const getUserByIdService = await getUser(
+        req.params.id,
+        req.userId,
+        req.userRole
+    );
+    res.status(200).json(getUserByIdService);
+}
+
+const deleteUserController = async (req: IRequestWithUserId, res: Response): Promise<void> => {
+    const deleteUserService = await deleteUser(
+        req.params.id,
+        req.userRole
+    );
+    res.status(200).json(deleteUserService);
+}
+
+const editUserController = async (req: IRequestWithUserId, res: Response): Promise<void> => {
+    const editUserService = await editUser(
+        req.params.id,
+        req.userId,
+        req.userRole,
+        req.body
+    );
+    res.status(200).json(editUserService);
+}
+
+export {
+    getUsersController,
+    addUserController,
+    getUserByIdController,
+    deleteUserController,
+    editUserController
 };

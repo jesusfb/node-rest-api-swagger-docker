@@ -8,21 +8,21 @@ import createError from '../helpers/errors/createError';
 import { BCRYPT_SALT }from '../config';
 import sendEmail from "../utils/email/sendEmail";
 
-const registration = async (data: any) => {
-    const { username } = data;
+const registration = async (username: string, password: string, role: string, 
+        email: string, firstname: string, lastname: string) => {
     let user = await User.findOne({ username });
 
     if (user) {
         throw createError(400, `User ${username} already exists`);
     }
     
-    user = new User(data);
+    user = new User({username, password, role, email, firstname, lastname});
 
     const token = generateAccessToken(user._id, user.role);
   
     if (token) {
         await user.save();
-        return data = {userId: user._id, ...data, token}
+        return {userId: user._id, username, password, role, email, firstname, lastname, token}
     } else {
          throw createError(400, 'Token error');
     }

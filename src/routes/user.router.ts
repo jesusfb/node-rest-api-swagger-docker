@@ -1,10 +1,10 @@
 import express from "express";
 import {
-    getUsers,
-    addUser,
-    getUser,
-    deleteUser,
-    editUser
+    getUsersController,
+    addUserController,
+    getUserByIdController,
+    deleteUserController,
+    editUserController
 } from '../controllers/user.controller';
 
 import {schemas} from "../models/User";
@@ -13,10 +13,10 @@ import ctrlWrapper from "../helpers/errors/ctrlWrapper";
 
 const router = express.Router();
 
-router.get('/', isAuth, ctrlWrapper(getUsers));
-router.post('/', isAuth, validation(schemas.userAdd), ctrlWrapper(addUser));
-router.get('/:id', isAuth, isValidId, ctrlWrapper(getUser));
-router.delete('/:id', isAuth, isValidId, ctrlWrapper(deleteUser));
-router.patch('/:id', isAuth, isValidId, validation(schemas.userUpdate), ctrlWrapper(editUser));
+router.get('/', isAuth, ctrlWrapper(getUsersController));
+router.post('/', isAuth, validation(schemas.userAdd), ctrlWrapper(addUserController));
+router.get('/:id', isAuth, isValidId, ctrlWrapper(getUserByIdController));
+router.delete('/:id', isAuth, isValidId, ctrlWrapper(deleteUserController));
+router.patch('/:id', isAuth, isValidId, validation(schemas.userUpdate), ctrlWrapper(editUserController));
 
 export default router;

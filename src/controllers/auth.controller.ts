@@ -9,7 +9,14 @@ import {
 } from "../services/auth.service";
 
 const registrationController = async (req: Request, res: Response): Promise<void> => {
-    const signupService = await registration(req.body);
+    const signupService = await registration(
+        req.body.username,
+        req.body.password,
+        req.body.role,
+        req.body.email,
+        req.body.firstname,
+        req.body.lastname
+    );
     res.status(201).json(signupService);
 };
 
