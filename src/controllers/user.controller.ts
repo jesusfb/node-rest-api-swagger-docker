@@ -1,4 +1,4 @@
-import User from "../models/User";
+import { User } from "../models/User";
 import { Response} from "express";
 import createError from "../helpers/errors/createError";
 import { IRequestWithUserId } from '../interfaces';

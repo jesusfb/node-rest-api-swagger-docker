@@ -6,7 +6,10 @@ const MONGO_URI: string = (process.env.NODE_ENV === 'test' ? process.env.MONGO_L
 const JWT_SECRET: string = process.env.JWT_SECRET || '';
 const MONG0_LOCAL = process.env.MONG0_LOCAL;
 const BCRYPT_SALT: number = Number(process.env.BCRYPT_SALT);
-const CLIENT_URL = process.env.CLIENT_URL;
+const EMAIL_HOST = process.env.EMAIL_HOST;
+const EMAIL = process.env.EMAIL;
+const GOOGLE_GEN_PASSWORD = process.env.GOOGLE_GEN_PASSWORD;
+const FROM_EMAIL = process.env.FROM_EMAIL;
 
 export  {
     PORT,
@@ -14,5 +17,8 @@ export  {
     JWT_SECRET,
     MONG0_LOCAL,
     BCRYPT_SALT,
-    CLIENT_URL
+    EMAIL_HOST,
+    EMAIL,
+    GOOGLE_GEN_PASSWORD,
+    FROM_EMAIL
 }

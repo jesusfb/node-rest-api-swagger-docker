@@ -4,7 +4,7 @@ import 'mocha';
 
 import { Response } from 'superagent';
 import app from '../app';
-import User from '../models/User';
+import { User } from '../models/User';
 import Todo from '../models/Todo';
 
 import { defaultUserData, userPostData, defaultTodo, postTodo } from './mocks/data.mock';
@@ -16,18 +16,18 @@ const { expect } = chai;
 export const launchRoleTest = (role: string) => {
     describe(role, () => {
         before((done) => {
-            User.deleteMany({}).catch(error => console.log(error));
+            User.deleteMany({}).catch((error: any) => console.log(error));
             done();
         });
 
         after((done) => {
-            User.deleteMany({}).catch(error => console.log(error));
+            User.deleteMany({}).catch((error: any) => console.log(error));
             done();
         });
 
         describe('DEFAULT DATA', () => {
             before((done) => {
-                Todo.deleteMany({}).catch(error => console.log(error));
+                Todo.deleteMany({}).catch((error: any) => console.log(error));
                 done();
             });
             let token: any;

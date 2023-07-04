@@ -1,53 +1,44 @@
-import User from "../models/User";
 import {Request, Response} from "express";
-import bcrypt from "bcrypt";
-import generateAccessToken from '../helpers/auth/generateAccessToken';
 import { IRequestWithUserId } from '../interfaces';
-import { userDto } from '../dto';
 
-import createError from "../helpers/errors/createError";
+import {
+    registration,
+    login,
+    passwordResetRequest,
+    resetPassword
+} from "../services/auth.service";
 
-const registration = async (req: Request, res: Response): Promise<void> => {
-    const { username, password, role, email, firstname, lastname } = req.body;
+const registrationController = async (req: Request, res: Response): Promise<void> => {
+    const signupService = await registration(req.body);
+    res.status(201).json(signupService);
+};
 
-    const candidate = await User.findOne({ username });
-
-    if (candidate) {
-        throw createError(400, `User ${username} already exists`);
-    }
-
-    const hashPassword = bcrypt.hashSync(password, 7);
-    const user = new User({ username, password: hashPassword, role, email, firstname, lastname });
-    const result = await user.save();
-    
-    res.status(201).json(result);
+const loginController = async (req: IRequestWithUserId, res: Response): Promise<void> => {
+    const loginService = await login(
+        req.body.username, 
+        req.body.password
+    );
+    req.userId = loginService.userId;
+    res.status(200).json({ token: loginService.token });
 }
 
-const login = async (req: IRequestWithUserId, res: Response): Promise<any> => {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+const passwordResetRequestController = async (req: Request, res: Response): Promise<void> => {
+    const requestPasswordResetService = await passwordResetRequest(req.body.email);
+    res.status(200).json(requestPasswordResetService);
+};
 
-    if (!user) {
-        throw createError(404, `User ${username} not found`);
-    }
-
-    const validPassword = bcrypt.compareSync(password, user.password);
-
-    if (!validPassword) {
-        throw createError(400, 'Wrong password entered');
-    }
-
-    const token = generateAccessToken(user._id, user.role);
-  
-    if (token) {
-        req.userId = user._id;
-        res.status(200).json({ token });
-    } else {
-        throw createError(400, 'Token error');
-    }  
-}
+const resetPasswordController = async (req: Request, res: Response): Promise<void> => {
+    const resetPasswordService = await resetPassword(
+        req.body.userId,
+        req.body.token,
+        req.body.password
+    );
+    res.status(200).json(resetPasswordService);
+};
 
 export {
-    registration,
-    login
+    registrationController,
+    loginController,
+    passwordResetRequestController,
+    resetPasswordController
 };

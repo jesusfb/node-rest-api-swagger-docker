@@ -1,9 +1,11 @@
 import mongoose, {Document} from "mongoose";
-import {NextFunction} from "express";
-import { RequestError } from '../interfaces';
+import bcrypt from "bcrypt";
 import Joi from "joi";
-const {Schema, model} = mongoose;
-import { IUser } from '../interfaces';
+import { NextFunction } from "express";
+const { Schema, model } = mongoose;
+
+import { IUser, RequestError } from '../interfaces';
+const { BCRYPT_SALT } = require('../config');
 
 const userSchema = new Schema<IUser>({
     username: {type: String, required: true, unique: true},
@@ -32,7 +34,7 @@ const userUpdate = Joi.object({
     lastname: Joi.string().min(2).max(255),
 });
 
-export const schemas = {
+const schemas = {
     userAdd,
     userUpdate
 }
@@ -48,10 +50,24 @@ const handleErrors = (error: RequestError, data: Document, next: NextFunction)=>
     }
     next()
 }
+
+userSchema.pre('save', async function (next) {
+    let user: any = this;
+    if (!user.isModified("password")) {
+        return next();
+    }
+    const hash = await bcrypt.hash(user.password, BCRYPT_SALT);
+    user.password = hash;
+    next();
+});
+
 //@ts-ignore
 userSchema.post('save', handleErrors);
 
 const User = model<IUser>("User", userSchema);
 
-export default User;
+export {
+    User,
+    schemas
+}
 

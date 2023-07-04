@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Date, Types } from 'mongoose';
 import { Request } from 'express';
 
 export interface IRequestWithUserId extends Request {
@@ -24,4 +24,10 @@ export interface ITodo {
     title: string,
     body: string,
     userId: Types.ObjectId
+}
+
+export interface IToken {
+    userId: Types.ObjectId,
+    token: string,
+    createdAt: Date
 }
