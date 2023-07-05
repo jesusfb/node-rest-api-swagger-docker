@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import 'mocha';
 
 import { Response } from 'superagent';
-import app from '../app';
+import app from '../../index';
 import { User } from '../models/User';
 import Todo from '../models/Todo';
 
@@ -37,10 +37,10 @@ export const launchRoleTest = (role: string) => {
             });
 
             it('it should login test user', async () => {
-                const testResponse: Response = await chai.request(app).post('/api/auth/login')
+                const testLoginResponse: Response = await chai.request(app).post('/api/auth/login')
                     .send({"username": `${defaultUserData.username}`, "password": `${defaultUserData.password}`});
 
-                token = testResponse.body.token;
+                token = testLoginResponse.body.token;
             });
 
             it('it should add test todo logged user', async () => {
@@ -59,9 +59,9 @@ export const launchRoleTest = (role: string) => {
             lastname: "register",
         }
     
-        let userToken: any;
-        let loggedUserId: any;
-        let addParam: any = 'blabla';
+        let userToken: string;
+        let loggedUserId: string;
+        let addParam: string = 'blabla';
 
         describe('REGISTRATION', () => {
     
@@ -73,7 +73,7 @@ export const launchRoleTest = (role: string) => {
                     expect(registerRes.body).to.deep.equal({message: `User ${userPostData.username} already exists`});
                 } else {
                     expect(registerRes.status).to.equal(201);
-
+                    
                     loggedUserId = registerRes.body._id;
                 }
             });

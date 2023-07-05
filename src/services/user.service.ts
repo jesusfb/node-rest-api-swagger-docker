@@ -36,7 +36,7 @@ const addUser = async (userRole: string | undefined, username: string, password:
 
 const getUser = async (id: string, userId: Types.ObjectId | undefined, userRole: string | undefined) => {
     let result;
-
+    
     if (userRole == 'ADMIN' || userId?.toString() === id) {
         result = await User.findById(id);
     }

@@ -22,7 +22,7 @@ const registration = async (username: string, password: string, role: string,
   
     if (token) {
         await user.save();
-        return {userId: user._id, username, password, role, email, firstname, lastname, token}
+        return {_id: user._id, username, password, role, email, firstname, lastname, token}
     } else {
          throw createError(400, 'Token error');
     }

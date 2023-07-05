@@ -1,15 +1,17 @@
 # Node-Rest-Api-Swagger
 
-This is a restful-api for two types of users - `ADMIN`, `USER`. Two models are implemented: users and todo lists. After logging in, each user can create todo lists. A usual user can perform CRUD operations only for their todo lists, an administrator can fault CRUD operations for any todo lists + CRUD for users.
+This is a restful-api for two types of users - `ADMIN`, `USER`. Two models are implemented: users and to-do lists. You can register/login. You can also reset your passwor, after which you will receive an email. After logging in, each user can create to-do lists. A usual user can perform CRUD operations on their profile and only for their to-do lists, an administrator can perform CRUD operations on any users and to-do lists.
 # Knowledge Cover
 
 - Node.js (Express.js)
 - TypeScript
+- SOA
 - Rest API
 - MongoDB & Mongoose
 - CRUD Operation
 - API documentation on Swagger
 - APIs Authorization (JWT)
+- Reset password (Nodemailer gmail)
 - CORS
 - Field validation
 - Error handling
@@ -103,10 +105,12 @@ When user login sucessfully, an unique accessToken will be returned.
 ## Auth
 > When creating a user, we specify a role and this gives us access to certain APIs.
 
-| APIs                   | Method |         Desc          |
-| ---------------------- | :----: | :-------------------: |
-| /api/auth/registration |  POST  | Register user account |
-| /api/auth/login        |  POST  |      User Login       |
+| APIs                           | Method |         Desc                                    |
+| -------------------------------| :----: | :---------------------------------------------: |
+| /api/auth/registration         |  POST  | Register user account                           |
+| /api/auth/login                |  POST  |      User Login                                 |
+| /api/auth/requestResetPassword |  POST  | Password reset request, send an email to gmail  |
+| /api/auth/resetPassword        |  POST  | Password reset, send an email to gmail          |
 
 <a id="table"></a>
 ## APIs for the ADMIN role

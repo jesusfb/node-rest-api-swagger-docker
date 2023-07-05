@@ -17,6 +17,7 @@ const registrationController = async (req: Request, res: Response): Promise<void
         req.body.firstname,
         req.body.lastname
     );
+    
     res.status(201).json(signupService);
 };
 
@@ -26,6 +27,7 @@ const loginController = async (req: IRequestWithUserId, res: Response): Promise<
         req.body.password
     );
     req.userId = loginService.userId;
+    
     res.status(200).json({ token: loginService.token });
 }
 

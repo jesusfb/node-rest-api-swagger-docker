@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "dev-local": "npm run build && NODE_ENV=test nodemon ./dist/index",
-    "test": "NODE_ENV=test mocha --timeout 10000 -r ts-node/register ./dist/src/tests/launchTest.spec.js --exit",
+    "test": "npm run build && NODE_ENV=test mocha --timeout 10000 -r ts-node/register ./dist/src/tests/launchTest.spec.js --exit",
     "dev": "ts-node-dev --poll index.ts",
     "build": "rimraf ./dist && tsc",
     "docker-compose-up:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
