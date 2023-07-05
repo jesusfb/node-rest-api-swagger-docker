@@ -33,9 +33,8 @@ cd node-rest-api-swagger-docker
 
 ## 3. Setting environment file .env.
 Create an `.env` file in the root of the project and fill it with the values ​​from the `.env.sample` file.
-```
-JWT_SECRET='SECRET_VALUE'
 
+```
 MONGO_LOCAL_URI=mongodb://localhost:27017/db
 MONGO_LOCAL_PORT=27017
 NODE_LOCAL_PORT=3000
@@ -43,6 +42,14 @@ NODE_LOCAL_PORT=3000
 MONGO_DOCKER_URI=mongodb://mongo:27017/node-app
 MONGO_DOCKER_PORT=27017
 NODE_DOCKER_PORT=4000
+
+JWT_SECRET=SECRET_VALUE
+BCRYPT_SALT=10
+EMAIL_HOST=smtp.gmail.com
+EMAIL=your_email
+GOOGLE_GEN_PASSWORD=your_google_app_password
+FROM_EMAIL=your_email
+TEXT_FOR_EMAIL=The text of the letter itself
 ```
 
 ## 4. Start project
